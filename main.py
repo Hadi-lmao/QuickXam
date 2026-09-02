@@ -3,6 +3,26 @@ import sys
 import json
 import sqlite3
 
+from frontend.home import (
+    create_home_page
+)
+
+from frontend.settings import (
+    create_settings_page
+)
+
+from frontend.practice import (
+    create_practice_page
+)
+
+from frontend.questions import (
+    create_questions_page
+)
+
+from frontend.test_history import (
+    create_test_history_page
+)
+
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
@@ -91,24 +111,28 @@ test_history_btn.setStyleSheet("""
     }
 """)
 
-
-home = QWidget()
-home.setStyleSheet("""
-    QWidget{
-        border: 1px solid #403A32;
-        border-radius: 10px;
+settings_btn = QPushButton("⚙️ Settings")
+settings_btn.setStyleSheet("""
+    QPushButton{
+        font-size: 17px;
+        border: 0px solid #555555;
+        color: #B8B0A3;
+        padding: 6px;
     }
-""")
-
-practice = QWidget()
-practice.setStyleSheet("""
-    QWidget{
+    QPushButton:hover{
         border: 1px solid #555555;
-        border-radius: 10px;
     }
 """)
 
+home = create_home_page()
 
+practice = create_practice_page()
+
+questions = create_questions_page()
+
+settings = create_settings_page()
+
+test_history = create_test_history_page()
 
 sidebar_stack = QStackedWidget()
 
@@ -135,8 +159,17 @@ practice_btn.clicked.connect(
     lambda: sidebar_stack.setCurrentWidget(practice)
 )
 
+settings_btn.clicked.connect(
+    lambda: sidebar_stack.setCurrentWidget(settings)
+)
 
+questions_btn.clicked.connect(
+    lambda: sidebar_stack.setCurrentWidget(questions)
+)
 
+test_history_btn.clicked.connect(
+    lambda: sidebar_stack.setCurrentWidget(test_history)
+)
 
 #=====================
 #Layout
@@ -165,8 +198,6 @@ window.setLayout(layout)
 #=====================
 #Home Area
 #=====================
-home_layout = QVBoxLayout()
-home.setLayout(home_layout)
 
 #=====================
 #Sidebar
@@ -181,12 +212,16 @@ sidebar_layout.addWidget(practice_btn)
 sidebar_layout.addWidget(questions_btn)
 sidebar_layout.addWidget(test_history_btn)
 sidebar_layout.addStretch()
+sidebar_layout.addWidget(settings_btn)
 
 layout.addWidget(sidebar)
 layout.addWidget(sidebar_stack)
 
 sidebar_stack.addWidget(home)
 sidebar_stack.addWidget(practice)
+sidebar_stack.addWidget(questions)
+sidebar_stack.addWidget(test_history)
+sidebar_stack.addWidget(settings)
 
 
 window.show()
