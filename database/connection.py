@@ -1,9 +1,8 @@
 import sqlite3
+from pathlib import Path
 
-DB_NAME = "data/quickxam.db"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = BASE_DIR / "quickxam.db"
 
 def get_connection():
-    connection = sqlite3.connect(DB_NAME)
-    connection.row_factory = sqlite3.Row
-    connection.execute("PRAGMA foreign_keys = ON")
-    return connection
+    return sqlite3.connect(DB_PATH)
